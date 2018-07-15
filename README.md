@@ -51,3 +51,6 @@
   * FILE_OUT : 로그파일 rolling 설정
     * 각 logger에 appender-ref="FILE_OUT" 주석을 해제해야 로그파일이 write 된다.
   * Log Level: TRACE > DEBUG > INFO > WARN > ERROR
+  
+# 테이블 생성
+* CRATE_KBOOKS_TABLE.sql 를 실행
