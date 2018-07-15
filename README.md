@@ -56,10 +56,11 @@
 * CREATE_KBOOKS_TABLE.sql 를 실행
 
 # 실행
-  1. STS(Spring Tool Suite) 다운로드 및 설치
+  1. STS(Spring Tool Suite) 다운로드 및 설치 [링크](https://spring.io/tools/sts/all)
   2. Git clone https://github.com/Henrry-J/BookFinder -- 레포지토리에서 프로젝트 복사
   3. 프로퍼티 설정 진행
   4. 테이블 생성 진행
   5. Maven Install
-  4. Run on Server > Tomcat v8.0 Server 선택
+  6. KBOOKS Project Build
+  7. Run on Server > Manually Define a new Server > Tomcat v8.0 Server 선택 > Finish
   5. http://localhost:8080/KBOOKS/ 접속 확인
