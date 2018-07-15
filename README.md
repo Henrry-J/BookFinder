@@ -11,10 +11,10 @@
 * 북마크
   
 # 실행환경
-* JDK 8.x
-* Spring Framework 4.x
-* Maven
-* Tomcat 8.x
+* JDK 1.8
+* Spring Framework 4.3
+* Maven 3.6
+* Tomcat 8.0
 * Oracle 11g
 
 # 참조 라이브러리
