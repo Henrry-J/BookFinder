@@ -53,4 +53,4 @@
   * Log Level: TRACE > DEBUG > INFO > WARN > ERROR
   
 # 테이블 생성
-* CRATE_KBOOKS_TABLE.sql 를 실행
+* CREATE_KBOOKS_TABLE.sql 를 실행
