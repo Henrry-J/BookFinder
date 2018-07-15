@@ -57,10 +57,11 @@
 
 # 실행
   1. STS(Spring Tool Suite) 다운로드 및 설치 [링크](https://spring.io/tools/sts/all)
-  2. Git clone https://github.com/Henrry-J/BookFinder -- 레포지토리에서 프로젝트 복사
-  3. 프로퍼티 설정 진행
-  4. 테이블 생성 진행
-  5. Maven Install
-  6. KBOOKS Project Build
-  7. Run on Server > Manually Define a new Server > Tomcat v8.0 Server 선택 > Finish
-  5. http://localhost:8080/KBOOKS/ 접속 확인
+  2. Apache-Tomcat 8.x 다운로드 및 설치 [링크](https://tomcat.apache.org/download-80.cgi)
+  3. Git clone https://github.com/Henrry-J/BookFinder -- 레포지토리에서 프로젝트 복사
+  4. 프로퍼티 설정 진행
+  5. 테이블 생성 진행
+  6. Maven Install
+  7. KBOOKS Project Build
+  8. Run on Server > Manually Define a new Server > Tomcat v8.0 Server 선택 > Finish
+  9. http://localhost:8080/KBOOKS/ 접속 확인
