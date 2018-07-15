@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+						http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<!-- Environment Properties -->
+	<util:properties id="evnProps" location="classpath:/META-INF/environment.properties" />
+	
+	<bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig" factory-method="custom">
+        <property name="socketTimeout" value="#{evnProps.getProperty('REQEUST_SOCKET_TIMEOUT')}" /> 
+        <property name="connectTimeout" value="#{evnProps.getProperty('REQEUST_CONNECTION_TIMEOUT')}" /> 
+        <property name="connectionRequestTimeout" value="#{evnProps.getProperty('REQUEST_REQUEST_TIMEOUT')}" />
+	</bean>
+ 
+	<bean id="requestConfig" factory-bean="requestConfigBuilder" factory-method="build" />
+ 
+	<bean id="socketConfigBuilder" class="org.apache.http.config.SocketConfig" factory-method="custom">
+	    <!-- 소켓이 연결된후 InputStream에서 읽을때 timeout -->
+	    <property name="soTimeout" value="#{evnProps.getProperty('SOKET_CONFIG_SOTIMEOUT')}" />
+	    <property name="soKeepAlive" value="#{evnProps.getProperty('SOKET_CONFIG_SOKEEPALIVE')}" /> 
+	    <!-- 비정상종료된 상태에서 아직 커널이 소켓의 bind정보를 유지하고 있을 때 해당 소켓을 재사용 할 수 있도록 -->
+	    <property name="soReuseAddress" value="#{evnProps.getProperty('SOKET_CONFIG_SOREUSEADDRESS')}" /> 
+	    <!-- nagle 알고리즘 적용 여부 -->
+	    <property name="tcpNoDelay" value="#{evnProps.getProperty('SOKET_CONFIG_TCPNODEDELAY')}" /> 
+	    <!-- socket이 close 될 때 버퍼에 남아 있는 데이터를 보내는데 기다려주는 시간(blocked)-->
+	    <property name="soLinger" value="#{evnProps.getProperty('SOKET_CONFIG_SOLINGER')}" /> 
+	</bean>
+ 
+	<bean id="poolingHttpClientConnectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" destroy-method="shutdown">
+	    <constructor-arg value="#{evnProps.getProperty('POOLED_HTTP_CLIENT_TIMETOLIVE')}" type="long" index="0" />
+	    <!-- pool에 있는 커넥션 제거 idle time -->
+	    <constructor-arg value="MILLISECONDS" type="java.util.concurrent.TimeUnit" index="1" />
+	    <property name="maxTotal" value="#{evnProps.getProperty('POOLED_HTTP_CLIENT_MAX_TOTAL')}" />
+	    <property name="defaultMaxPerRoute" value="#{evnProps.getProperty('POOLED_HTTP_CLIENT_MAX_PERROUTE')}" />
+	    <property name="defaultSocketConfig">
+	    	<bean factory-bean="socketConfigBuilder" factory-method="build" />
+	    </property>
+	</bean>
+ 
+	<bean id="connectionKeepAliveStrategy" class="com.kbk.common.restrequest.conn.HttpShortKeepAliveStrategy" />
+ 
+	<bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder" factory-method="create">            
+	    <property name="defaultRequestConfig" ref="requestConfig" />
+	    <property name="connectionManager" ref="poolingHttpClientConnectionManager" />
+	    <property name="userAgent" value="Mozilla/5.0 (Windows NT 6.1; WOW64) CUSTOM-CLIENT" />
+	    <property name="keepAliveStrategy" ref="connectionKeepAliveStrategy" />
+	</bean>
+ 
+	<bean id="httpClient" factory-bean="httpClientBuilder" factory-method="build" destroy-method="close" />
+	
+	<!-- Rest Template -->
+	<bean id="bRestTemplate" class="org.springframework.web.client.RestTemplate">
+    	<constructor-arg>
+        	<bean class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+        		<constructor-arg ref="httpClient" />
+        		<property name="readTimeout" value="#{evnProps.getProperty('HTTP_CLIENT_READ_TIMEOUT')}" />
+        		<property name="connectTimeout" value="#{evnProps.getProperty('HTTP_CLIENT_CONNECT_TIMEOUT')}" />
+            </bean>
+    	</constructor-arg>
+	</bean>
+</beans>

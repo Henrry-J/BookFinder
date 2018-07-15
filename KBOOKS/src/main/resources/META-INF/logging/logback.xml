@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration scan="true" scanPeriod="30 seconds">
+ 	
+	<property name="LOG_HOME" value="C:/logs"/>	
+	<property name="LOG_FILE" value="kbooks_web"/>
+
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss}  %thread  %-5level  %logger{40}  - %msg%n"/>
+    
+    <appender name="FILE_OUT"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_HOME}/${LOG_FILE}.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Log Level: TRACE > DEBUG > INFO > WARN > ERROR -->
+    <logger name="com.kbk.business.common.main.web" level="INFO"  additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+	
+	<!-- Log Level: TRACE > DEBUG > INFO > WARN > ERROR -->
+    <logger name="com.kbk.common.login.web" level="DEBUG"  additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+    
+    <logger name="com.kbk.common.interceptor" level="DEBUG" additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+	
+	<logger name="com.kbk.common.session" level="DEBUG" additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+	
+    <logger name="com.kbk.common.mstdata.service" level="DEBUG" additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+	
+	<logger name="com.kbk.common.security.service" level="DEBUG" additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+	
+    <!-- Query Logger -->
+    <logger name="jdbc.sqlonly" level="INFO" additivity="false">  
+        <appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+    </logger>
+    
+    <logger name="jdbc.audit" level="WARN"  additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+	
+	<logger name="jdbc.resultset" level="WARN"  additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+	
+	<!-- JDBC Resultsettable Logger -->
+    <logger name="jdbc.resultsettable" level="INFO"  additivity="false">  
+        <appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+    </logger>
+    
+	<logger name="jdbc.sqltiming" level="WARN"  additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+    
+    <logger name="jdbc.connection" level="WARN"  additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+    
+    <!-- SFTP -->
+	<logger name="com.jcraft.jsch" level="INFO"  additivity="false">  
+  		<appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+	</logger>
+	
+    <!-- ROOT Logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+<!--         <appender-ref ref="FILE_OUT" /> -->
+    </root>
+</configuration>

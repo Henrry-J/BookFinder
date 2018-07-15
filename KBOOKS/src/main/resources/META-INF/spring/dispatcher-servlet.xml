@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 	xmlns:context="http://www.springframework.org/schema/context"
+ 	xmlns:aop="http://www.springframework.org/schema/aop"
+ 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+ 						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+ 						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+ 						http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+	<context:annotation-config />
+	
+	<mvc:annotation-driven />
+
+	<context:component-scan base-package="com.kbk">
+		<!-- Controller -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
+	
+	<!-- Controller Evnet Logging Aspect -->
+	<bean id="eventLoggingAspect"  class="com.kbk.common.aspect.EventLoggingAspects" />
+	<aop:config proxy-target-class="false" expose-proxy="true">
+		<!-- Logging -->
+		<aop:aspect id="eventLoggingAspect" ref="eventLoggingAspect">
+				<aop:around method="aroundAdvice"  pointcut="execution(* com.kbk..*Controller.*(..))" />
+		</aop:aspect>
+		<!-- Exception -->
+		<aop:aspect id="exceptionAspect" ref="exceptionAspect">
+			<aop:pointcut id="controllerExceptionPointcut" expression="execution(* com.kbk..*Controller.*(..))" />
+			<aop:after-throwing pointcut-ref="controllerExceptionPointcut" method="controllerExceptionAdvice" throwing="ex" />
+		</aop:aspect>
+	</aop:config>
+	
+	<bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" id="messageSource">
+		<property name="basenames" value="WEB-INF/resources/messages/messages" />
+		<property name="cacheSeconds" value="10"/>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.i18n.CookieLocaleResolver" id="localeResolver">
+		<property name="cookieName" value="mylocale" />
+	</bean>
+	
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang" />
+		</bean>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/images/**"/>
+			<mvc:exclude-mapping path="/jquery/**"/>
+			<bean class="com.kbk.common.interceptor.UserAuthInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+    
+ 	<!-- Static Resources -->
+ 	<mvc:resources mapping="/images/**"				location="WEB-INF/resources/images/"/>
+  	<mvc:resources mapping="/jquery/**"   			location="WEB-INF/resources/plugin/jquery-3.3.1/"/>
+  
+	<!-- Multipart Resolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10485760" />
+		<property name="resolveLazily" value="true" />
+		<property name="defaultEncoding" value="utf-8"/>
+	</bean>
+	
+ 	<!-- View Resolver -->
+ 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+ 		<property name="prefix" value="/WEB-INF/page/"/>
+ 		<property name="suffix" value=".jsp"/>
+	</bean>    
+    
+	<!-- HandlerException Resolver -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	    <property name="defaultErrorView" value="error/error_default"/>
+	</bean>	
+</beans>
