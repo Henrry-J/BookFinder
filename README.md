@@ -51,3 +51,15 @@
   * FILE_OUT : 로그파일 rolling 설정
     * 각 logger에 appender-ref="FILE_OUT" 주석을 해제해야 로그파일이 write 된다.
   * Log Level: TRACE > DEBUG > INFO > WARN > ERROR
+  
+# 테이블 생성
+* CREATE_KBOOKS_TABLE.sql 를 실행
+
+# 실행
+  1. STS(Spring Tool Suite) 다운로드 및 설치
+  2. Git clone https://github.com/Henrry-J/BookFinder -- 레포지토리에서 프로젝트 복사
+  3. 프로퍼티 설정 진행
+  4. 테이블 생성 진행
+  5. Maven Install
+  4. Run on Server > Tomcat v8.0 Server 선택
+  5. http://localhost:8080/KBOOKS/ 접속 확인
