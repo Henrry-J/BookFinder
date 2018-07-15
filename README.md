@@ -63,5 +63,5 @@
   5. 테이블 생성 진행
   6. Maven Install
   7. KBOOKS Project Build
-  8. Run on Server > Manually Define a new Server > Tomcat v8.0 Server 선택 > Finish
+  8. Run As > Run on Server > Manually Define a new Server > Tomcat v8.0 Server 선택 > Finish
   9. http://localhost:8080/KBOOKS/ 접속 확인
